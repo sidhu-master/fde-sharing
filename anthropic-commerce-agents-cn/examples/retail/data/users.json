@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "user_id": "demo-user",
+      "display_name": "Priya",
+      "loyalty_tier": "ACME 订阅会员",
+      "default_location": "Maple Heights",
+      "preferences": {
+        "spending": "通常选择中等价位",
+        "home": "两居室公寓，没有户外储物空间",
+        "household": "与伴侣及一个 6 岁孩子同住",
+        "pet": "一只名叫 Biscuit 的金毛",
+        "style": "简约、中性色"
+      }
+    },
+    {
+      "user_id": "demo-user-2",
+      "display_name": "Sam",
+      "loyalty_tier": "访客",
+      "default_location": "Springfield",
+      "preferences": {
+        "budget": "注重性价比",
+        "interests": "越野跑、周末露营"
+      }
+    }
+  ]
+}

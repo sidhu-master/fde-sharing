@@ -1,0 +1,72 @@
+/*
+ * Copyright 2026 Anthropic PBC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@import "tailwindcss";
+@source "../app/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
+@source "../lib/**/*.{ts,tsx}";
+@source "../../../web-shared/**/*.{ts,tsx}";
+@source "../../../web-shared/portal/**/*.{ts,tsx}";
+@import "../../../web-shared/portal/portal.css";
+
+/*
+ * ACME Mobile design system: a cool off-white sheet with a 120px ruling, near-black ink,
+ * signal green for the assistant and approvals, amber for warnings, tabular mono numerals.
+ */
+
+:root {
+  --ground: #eef0eb; /* page */
+  --surface: #f6f7f4; /* text on ink */
+  --card: #f9faf7; /* cards, sidebar, rail */
+  --chrome: #f9faf7; /* sidebar and mobile bar */
+  --well: #e8ebe4; /* chips, thumbs, hover ground */
+  --ink: #0e1116; /* near-black: text and structure */
+  --ink-2: #2c323b; /* secondary text that still reads as content */
+  --ink-soft: #565d66; /* labels and metadata */
+  --ink-faint: #8f959d; /* hints and placeholders */
+  --line: rgba(14, 17, 22, 0.11);
+  --line-strong: rgba(14, 17, 22, 0.19); /* control borders */
+  --accent: #00b86b; /* signal green: the assistant's mark, hover, focus, live */
+  --accent-strong: #00a35f; /* approve buttons */
+  --accent-soft: #def3e8;
+  --accent-ink: #00663c; /* text on accent-soft */
+  --on-accent: #0e1116; /* text on accent and accent-strong */
+  --ok: #138254; /* positive change, applied */
+  --ok-soft: #dcf1e6;
+  --warn: #b87a00; /* low stock, results held by a safety gate */
+  --warn-soft: #fdf0d7;
+  --danger: #b3382c; /* errors, negative change */
+  --danger-soft: #f7dedb;
+  --info: #2563a6; /* customer messages, shipped */
+  --info-soft: #e1ecf8;
+  --violet: #6547c9; /* awaiting approval, quoted-as-data */
+  --violet-soft: #ebe7fa;
+  --shadow-sm: 0 1px 2px rgba(14, 17, 22, 0.05), 0 1px 1px rgba(14, 17, 22, 0.03);
+  --shadow: 0 1px 2px rgba(14, 17, 22, 0.05), 0 4px 14px -6px rgba(14, 17, 22, 0.14);
+  --shadow-lg: 0 12px 40px -12px rgba(14, 17, 22, 0.28), 0 2px 6px rgba(14, 17, 22, 0.08);
+  --radius: 12px;
+}
+
+body {
+  font-family: var(--font-body), "Barlow", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* The sheet's ruling, behind the page content. */
+.portal-main {
+  background-image:
+    linear-gradient(to right, rgba(14, 17, 22, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 17, 22, 0.035) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px;
+}
+
+/* Prices, counts, ids, and percentages. */
+.am-mono {
+  font-family: var(--font-mono), "Spline Sans Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,58 @@
+// Copyright 2026 Anthropic PBC
+// SPDX-License-Identifier: Apache-2.0
+
+"use client";
+
+/** Renders present_guide. */
+
+import PlanTile from "@/components/PlanTile";
+import { formatPriceWithUnit } from "@/lib/format";
+import type { GuidePayload } from "@/lib/types";
+import { Frame } from "./shared";
+
+export default function TermsCard({ payload }: { payload: GuidePayload }) {
+  return (
+    <Frame component="guide" label={payload.title}>
+      <div className="space-y-3">
+        {(payload.sections ?? []).map((section, index) => (
+          <div
+            key={index}
+            className={`am-reveal-item ${index > 0 ? "am-rule pt-3" : ""}`}
+            style={{ animationDelay: `${index * 70}ms` }}
+          >
+            <h3 className="am-meta !text-(--ink)">{section.heading}</h3>
+            <p className="mt-1 text-[15px] leading-relaxed text-(--ink)">{section.body}</p>
+          </div>
+        ))}
+      </div>
+
+      {payload.related_products?.length ? (
+        <div className="am-rule mt-4 space-y-2 pt-3">
+          {payload.related_products.map((product) => (
+            <PlanTile
+              key={product.product_id}
+              product={product}
+              note={product.product_id}
+              trailing={
+                <span className="am-mono shrink-0 text-[13px] font-semibold text-(--ink)">
+                  {formatPriceWithUnit(product)}
+                </span>
+              }
+            />
+          ))}
+        </div>
+      ) : null}
+
+      {payload.sources?.length ? (
+        <div className="am-rule mt-4 flex flex-wrap items-center gap-1.5 pt-2.5">
+          <span className="am-meta">Sources</span>
+          {payload.sources.map((source) => (
+            <span key={source} className="am-tag">
+              {source}
+            </span>
+          ))}
+        </div>
+      ) : null}
+    </Frame>
+  );
+}

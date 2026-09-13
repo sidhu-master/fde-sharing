@@ -1,0 +1,46 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*
+*secret*
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Node and frontend builds
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+
+# Local runtime data
+.memory-*.json
+.storefront_memory.json
+.merchant_memory.json
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+.claude/
+
+# Miscellaneous generated files
+*.log
+*.tmp
+*.swp

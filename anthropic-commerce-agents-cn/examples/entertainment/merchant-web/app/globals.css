@@ -1,0 +1,98 @@
+/*
+ * Copyright 2026 Anthropic PBC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@import "tailwindcss";
+@source "../app/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
+@source "../lib/**/*.{ts,tsx}";
+@source "../../../web-shared/**/*.{ts,tsx}";
+@source "../../../web-shared/portal/**/*.{ts,tsx}";
+@import "../../../web-shared/portal/portal.css";
+
+/*
+ * ACME Tickets design system: the dark house as ground, lifted cards, near-white ink,
+ * limelight pink for the assistant and approvals, condensed display type for the wordmark
+ * and event names, mono tabular figures for counts.
+ */
+
+:root {
+  --ground: #0f0e15; /* the house: page */
+  --surface: #0f0e15; /* text on ink */
+  --card: #1a1826; /* cards and rail */
+  --chrome: #16141f; /* sidebar and mobile bar */
+  --well: #242134; /* chips, thumbs, hover ground */
+  --ink: #f3f1fa; /* near-white: text and structure */
+  --ink-2: #d2cee2; /* secondary text that still reads as content */
+  --ink-soft: #a49fb8; /* labels and metadata */
+  --ink-faint: #6f6a86; /* hints and placeholders */
+  --line: rgba(243, 241, 250, 0.11);
+  --line-strong: rgba(243, 241, 250, 0.22); /* control borders */
+  --accent: #ff4d8d; /* limelight: the assistant's mark, hover, focus */
+  --accent-strong: #ff4d8d; /* approve buttons */
+  --accent-soft: rgba(255, 77, 141, 0.15);
+  --accent-ink: #ff8fb8; /* text on accent-soft */
+  --on-accent: #16101a; /* text on accent */
+  --ok: #3ddba0; /* applied, positive change */
+  --ok-soft: rgba(61, 219, 160, 0.13);
+  --warn: #ffb84d; /* real scarcity; results held by a safety gate */
+  --warn-soft: rgba(255, 184, 77, 0.14);
+  --danger: #ff6b6b; /* under-pacing, negative change, errors */
+  --danger-soft: rgba(255, 107, 107, 0.14);
+  --info: #4dc3ff; /* fan messages, issued */
+  --info-soft: rgba(77, 195, 255, 0.13);
+  --violet: #a596ff; /* awaiting approval, quoted-as-data */
+  --violet-soft: rgba(143, 123, 255, 0.16);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 48px -12px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --radius: 7px;
+}
+
+body {
+  font-family: var(--font-body), "Archivo", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Display face: wordmark, event names, greetings. */
+.page-title,
+.at-display {
+  font-family: var(--font-display), "Big Shoulders", ui-sans-serif, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  line-height: 1.05;
+}
+
+/* Prices, counts, ids, and percentages. */
+.at-mono {
+  font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pulsing dot in the store mark. */
+@keyframes at-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.at-live {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(255, 77, 141, 0.7);
+  animation: at-pulse 1.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-live {
+    animation: none;
+  }
+}

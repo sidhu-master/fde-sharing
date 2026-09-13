@@ -80,12 +80,12 @@ export function plural(count: number, one: string, many = `${one}s`): string {
 
 /** "12 days of cover", "1 day of cover", "<1 day of cover". */
 export function coverLabel(days: number): string {
-  return days < 1 ? "<1 day of cover" : `${plural(Math.round(days), "day")} of cover`;
+  return days < 1 ? "库存不足 1 天" : `库存约可支撑 ${Math.round(days)} 天`;
 }
 
 /** "sells out in ~4 days", "sells out within a day". */
 export function runwayLabel(days: number): string {
-  return days < 1 ? "sells out within a day" : `sells out in ~${plural(Math.round(days), "day")}`;
+  return days < 1 ? "一天内即将售罄" : `约 ${Math.round(days)} 天后售罄`;
 }
 
 /** What can still be chosen on a product with options, and what a variant chose. */
@@ -192,7 +192,7 @@ export function formatComparisonLabel(
     const compareEnd = parseDate(compare[2]).getTime();
     const compareDays = Math.round((compareEnd - parseDate(compare[1]).getTime()) / dayMs);
     if (primaryDays === compareDays && Math.round((primaryStart - compareEnd) / dayMs) === 1) {
-      return primaryDays === 6 ? "prior week" : "prior period";
+      return primaryDays === 6 ? "上一周" : "上一周期";
     }
   }
   return formatPeriodLabel(compareTo);
@@ -203,8 +203,8 @@ export function describeProposer(change: {
   created_by_kind?: "operator" | "agent";
 }): string {
   return change.created_by_kind === "agent"
-    ? `Proposed by ${change.created_by}'s assistant`
-    : `Staged by ${change.created_by}`;
+    ? `由 ${change.created_by} 的智能助手提议`
+    : `由 ${change.created_by} 提交`;
 }
 
 /** Approvals are always a person. */
@@ -214,11 +214,11 @@ export function describeResolver(change: {
   discarded_by?: string | null;
   discarded_by_kind?: "operator" | "agent" | null;
 }): string | null {
-  if (change.status === "applied" && change.applied_by) return `Approved by ${change.applied_by}`;
+  if (change.status === "applied" && change.applied_by) return `由 ${change.applied_by} 批准`;
   if (change.status === "discarded" && change.discarded_by) {
     return change.discarded_by_kind === "agent"
-      ? `Dismissed by ${change.discarded_by}'s assistant`
-      : `Dismissed by ${change.discarded_by}`;
+      ? `由 ${change.discarded_by} 的智能助手驳回`
+      : `由 ${change.discarded_by} 驳回`;
   }
   return null;
 }
@@ -226,9 +226,9 @@ export function describeResolver(change: {
 /** "Good morning" before noon, "Good afternoon" until six, then "Good evening". */
 export function greeting(now: Date): string {
   const hour = now.getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour < 12) return "早上好";
+  if (hour < 18) return "下午好";
+  return "晚上好";
 }
 
 export interface HandoffLink {

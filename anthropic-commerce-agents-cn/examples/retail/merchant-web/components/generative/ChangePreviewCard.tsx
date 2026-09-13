@@ -56,7 +56,7 @@ export default function ChangePreviewCard({
   return (
     <GenCard>
       <GenCardHeader
-        title={payload.headline ?? "Proposed change"}
+        title={payload.headline ?? "变更提案"}
         meta={
           <>
             <ChangeStatusPill status={change.status} />

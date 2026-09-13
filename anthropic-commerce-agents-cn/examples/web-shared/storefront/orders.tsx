@@ -123,12 +123,12 @@ export const ORDER_NOUNS: OrderNouns = {
 function orderTitle(order: Order, nouns: OrderNouns): string {
   const [first, ...rest] = order.items;
   if (!first) return order.order_id;
-  return rest.length ? `${first.title} + ${nouns.moreLabel?.(rest.length) ?? `${rest.length} more`}` : first.title;
+  return rest.length ? `${first.title} + ${nouns.moreLabel?.(rest.length) ?? `另外 ${rest.length} 件`}` : first.title;
 }
 
 function When({ order, nouns }: { order: Order; nouns: OrderNouns }) {
   const estimate = estimateOf(order, nouns.locale);
-  if (!estimate) return <span>Placed {formatDayMonth(order.placed_at)}</span>;
+  if (!estimate) return <span>{formatDayMonth(order.placed_at)} 下单</span>;
   if (!isOpen(order)) return <span>{nouns.closedWhen(order, estimate.date)}</span>;
   return (
     <span className={order.status === "delayed" ? "font-semibold text-(--warn)" : ""} title={estimate.note ?? undefined}>
@@ -178,7 +178,7 @@ export function ArrivingPanel({
   thumb: (order: Order) => ReactNode;
   onSeeAll?: () => void;
 }) {
-  if (!orders) return failed ? <Notice>Couldn&apos;t load your {nouns.title.toLowerCase()}.</Notice> : <Skeleton className="h-[188px]" />;
+  if (!orders) return failed ? <Notice>订单加载失败。</Notice> : <Skeleton className="h-[188px]" />;
   // A shopper with no history gets no card; one with nothing open sees the two most recent.
   if (!orders.length) return null;
   const open = upcoming(orders).slice(0, 3);
@@ -221,18 +221,18 @@ export function OrdersView({
     <StorePage>
       <PageHeader title={nouns.title} subtitle={subtitle}>
         <Segmented
-          label={`Filter ${title}`}
+          label={`筛选${title}`}
           value={filter}
           onChange={setFilter}
           options={[
-            { id: "all", label: "All", count: all.length },
+            { id: "all", label: "全部", count: all.length },
             ...nouns.filters.map((entry) => ({ id: entry.id, label: entry.label, count: all.filter(entry.match).length })),
           ]}
         />
       </PageHeader>
       {orders === null ? (
         failed ? (
-          <Notice>Couldn&apos;t load your {title}. The assistant can still look them up.</Notice>
+          <Notice>订单加载失败。你也可以直接让智能导购帮你查询。</Notice>
         ) : (
           <Skeleton className="h-[320px]" />
         )
@@ -245,7 +245,7 @@ export function OrdersView({
           </ul>
         </Panel>
       ) : (
-        <Notice>No {title} here.</Notice>
+        <Notice>这里还没有订单。</Notice>
       )}
     </StorePage>
   );

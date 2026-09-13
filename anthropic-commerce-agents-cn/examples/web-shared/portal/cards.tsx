@@ -81,9 +81,9 @@ interface ChangeLike {
 }
 
 export const CHANGE_STATUS: Record<ChangeLike["status"], { tone: Tone; label: string }> = {
-  staged: { tone: "violet", label: "Awaiting approval" },
-  applied: { tone: "ok", label: "Approved" },
-  discarded: { tone: "muted", label: "Dismissed" },
+  staged: { tone: "violet", label: "待批准" },
+  applied: { tone: "ok", label: "已批准" },
+  discarded: { tone: "muted", label: "已驳回" },
 };
 
 export function ChangeStatusPill({ status }: { status: ChangeLike["status"] }) {
@@ -142,21 +142,19 @@ export function ApproveBar({
       {change.status === "staged" ? (
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="accent" size="sm" icon="check" onClick={() => onAct("apply")} disabled={busy !== null || !canAct}>
-            {busy === "apply" ? "Applying…" : "Approve"}
+            {busy === "apply" ? "批准中…" : "批准"}
           </Button>
           <Button variant="secondary" size="sm" onClick={() => onAct("discard")} disabled={busy !== null || !canAct}>
-            {busy === "discard" ? "Dismissing…" : "Dismiss"}
+            {busy === "discard" ? "驳回中…" : "驳回"}
           </Button>
-          <span className="text-[11.5px] leading-tight text-(--ink-soft)">Nothing applies until you approve.</span>
+          <span className="text-[11.5px] leading-tight text-(--ink-soft)">在你批准之前不会生效。</span>
         </div>
       ) : (
         <div className="flex items-center gap-2 text-[13px] text-(--ink-soft)">
           <Icon name={change.status === "applied" ? "check" : "x"} size={15} className={change.status === "applied" ? "text-(--ok)" : "text-(--ink-faint)"} />
           {change.status === "applied"
-            ? `Approved${change.applied_by ? ` by ${change.applied_by}` : ""}${change.applied_at ? ` on ${formatDate(change.applied_at)}` : ""}.`
-            : `Dismissed${
-                change.discarded_by ? ` by ${change.discarded_by}${change.discarded_by_kind === "agent" ? "'s assistant" : ""}` : ""
-              }. Nothing was changed.`}
+            ? `已批准${change.applied_by ? `（由 ${change.applied_by}` : ""}${change.applied_at ? ` 于 ${formatDate(change.applied_at)}` : ""}${change.applied_by ? "）" : ""}。`
+            : `已驳回${change.discarded_by ? `（由 ${change.discarded_by}${change.discarded_by_kind === "agent" ? " 的智能助手" : ""}` : ""}${change.discarded_by ? "）" : ""}。未做任何更改。`}
         </div>
       )}
       {error ? <div className="mt-2 text-[13px] text-(--danger)">{error}</div> : null}

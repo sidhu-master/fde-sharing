@@ -43,9 +43,9 @@ function buildToolRows(entries: TraceEntry[]): ToolRow[] {
 }
 
 const GATE_LABELS: Record<string, string> = {
-  provenance: "provenance gate",
-  approval: "approval gate",
-  guardrail: "guardrail",
+  provenance: "来源校验",
+  approval: "审批确认",
+  guardrail: "安全护栏",
 };
 
 type RowStatus = "running" | "blocked" | "error" | "ok";
@@ -75,11 +75,11 @@ function rowStatus(row: ToolRow): RowStatus {
 function trailing(row: ToolRow, status: RowStatus): string {
   switch (status) {
     case "running":
-      return "running…";
+      return "执行中…";
     case "blocked":
-      return `held · ${GATE_LABELS[row.reason ?? ""] ?? "safety gate"}`;
+      return `已拦截 · ${GATE_LABELS[row.reason ?? ""] ?? "安全拦截"}`;
     case "error":
-      return "error";
+      return "出错";
     default:
       // The in-process mock backends answer in under a millisecond.
       return row.durationMs != null && row.durationMs < 1 ? "<1 ms" : `${Math.round(row.durationMs ?? 0)} ms`;
@@ -100,7 +100,7 @@ function ToolCallRow({ row }: { row: ToolRow }) {
         <span className={`w-3.5 shrink-0 text-center text-[12px] leading-none ${TONE[status]}`} aria-hidden>
           {GLYPH[status]}
         </span>
-        {status === "ok" ? <span className="sr-only">ok</span> : null}
+        {status === "ok" ? <span className="sr-only">完成</span> : null}
         <span className="min-w-0 flex-1 truncate font-mono text-[13px] text-(--ink)">{row.tool}</span>
         <span className={`ml-auto shrink-0 text-right font-mono text-[11px] tabular-nums ${TONE[status]}`}>
           {trailing(row, status)}
@@ -108,11 +108,11 @@ function ToolCallRow({ row }: { row: ToolRow }) {
       </button>
       {open ? (
         <div className="mb-2 ml-5 space-y-2">
-          {row.input ? <Detail label="Input" tone="bg-(--well)/70 text-(--ink)" text={row.input} /> : null}
+          {row.input ? <Detail label="输入" tone="bg-(--well)/70 text-(--ink)" text={row.input} /> : null}
           {row.excerpt !== undefined ? (
-            <Detail label="Result (excerpt)" tone={RESULT_TONE[status]} text={row.excerpt || "(empty)"} />
+            <Detail label="结果（摘录）" tone={RESULT_TONE[status]} text={row.excerpt || "（空）"} />
           ) : row.result !== undefined ? (
-            <Detail label="Result" tone={RESULT_TONE[status]} text={row.result || "(empty)"} />
+            <Detail label="结果" tone={RESULT_TONE[status]} text={row.result || "（空）"} />
           ) : null}
         </div>
       ) : null}
@@ -148,7 +148,7 @@ export function Inspector({
   trace,
   memory,
   newMemoryKeys,
-  memoryTitle = "Memory",
+  memoryTitle = "记忆",
   onClose,
 }: {
   turnCount: number;
@@ -186,11 +186,11 @@ export function Inspector({
         <div className="flex items-start justify-between gap-3 border-b border-(--line) px-4 py-3">
           <div className="flex min-w-0 items-start gap-2">
             {turnCount > 1 ? (
-              <span className="flex shrink-0 items-center gap-0.5" role="group" aria-label="Reply">
-                <button type="button" onClick={() => stepTo(turn - 1)} disabled={turn <= 1} aria-label="Previous reply" className={stepButton}>
+              <span className="flex shrink-0 items-center gap-0.5" role="group" aria-label="回复">
+                <button type="button" onClick={() => stepTo(turn - 1)} disabled={turn <= 1} aria-label="上一条回复" className={stepButton}>
                   ‹
                 </button>
-                <button type="button" onClick={() => stepTo(turn + 1)} disabled={turn >= turnCount} aria-label="Next reply" className={stepButton}>
+                <button type="button" onClick={() => stepTo(turn + 1)} disabled={turn >= turnCount} aria-label="下一条回复" className={stepButton}>
                   ›
                 </button>
               </span>
@@ -198,19 +198,19 @@ export function Inspector({
             <div className="min-w-0">
               <h2 className="flex flex-wrap items-baseline gap-x-1.5 text-sm text-(--ink)">
                 {turnCount === 0 ? (
-                  <span className="font-bold">Activity</span>
+                  <span className="font-bold">动态</span>
                 ) : (
                   <>
                     <span className="font-bold">
-                      Reply {turn}
-                      {turnCount > 1 ? <span className="font-normal text-(--ink-soft)"> of {turnCount}</span> : null}
+                      第 {turn} 条回复
+                      {turnCount > 1 ? <span className="font-normal text-(--ink-soft)"> / 共 {turnCount} 条</span> : null}
                     </span>
                     <span className="font-normal text-(--ink-soft)">
                       {working ? (
-                        <span className="animate-pulse">· working…</span>
+                        <span className="animate-pulse">· 处理中…</span>
                       ) : (
                         <>
-                          · {rows.length} step{rows.length === 1 ? "" : "s"}
+                          · {rows.length} 步
                           {done?.elapsedMs && done.elapsedMs >= 100 ? ` · ${(done.elapsedMs / 1000).toFixed(1)}s` : ""}
                         </>
                       )}
@@ -226,7 +226,7 @@ export function Inspector({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close activity"
+            aria-label="关闭动态面板"
             className="rounded-md px-2 py-0.5 text-lg leading-none text-(--ink-soft) hover:text-(--ink)"
           >
             ×
@@ -235,11 +235,11 @@ export function Inspector({
 
         <div className="panel-scroll flex-1 overflow-y-auto px-4 py-3">
           <section>
-            <Heading>Steps</Heading>
+            <Heading>执行步骤</Heading>
             {turnCount === 0 ? (
-              <Empty>No replies yet.</Empty>
+              <Empty>还没有回复。</Empty>
             ) : rows.length === 0 ? (
-              <Empty>{working ? "Working…" : "No tool calls this reply."}</Empty>
+              <Empty>{working ? "处理中…" : "这条回复没有工具调用。"}</Empty>
             ) : (
               <ul className="mt-1 divide-y divide-(--line)">
                 {rows.map((row, index) => (
@@ -252,16 +252,16 @@ export function Inspector({
           <section className="mt-5 border-t border-(--line) pt-4">
             <Heading>
               {memoryTitle}
-              {newCount ? <span className="font-normal text-(--ink-soft)"> · {newCount} new this session</span> : null}
+              {newCount ? <span className="font-normal text-(--ink-soft)"> · 本次会话新增 {newCount} 条</span> : null}
             </Heading>
             {memory.length === 0 ? (
-              <Empty>Nothing saved yet.</Empty>
+              <Empty>还没有保存任何记忆。</Empty>
             ) : (
               <ul className="mt-1 space-y-1">
                 {memory.map((fact) => (
                   <li key={fact.key} className="text-[13px] leading-snug text-(--ink)">
                     {fact.value}
-                    {newMemoryKeys.has(fact.key) ? <em className="ml-1.5 text-(--ink-soft)">new</em> : null}
+                    {newMemoryKeys.has(fact.key) ? <em className="ml-1.5 text-(--ink-soft)">新增</em> : null}
                   </li>
                 ))}
               </ul>

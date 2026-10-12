@@ -4,6 +4,6 @@
 
 ## 当前内容
 
-- [Anthropic 电商 Agent 中文本地化版](./anthropic-commerce-agents-cn/README.zh-CN.md)
+- [Anthropic 电商 Agent 中文本地化版](./anthropic-commerce-agents-cn/README.zh-CN.md)：客户商城与商家管理双场景、商品推荐、订单处理与生成式界面。
 - [OpenAI 人工协作客服 Demo 中文版](./openai-support-agent-demo-cn/README.zh-CN.md)：客户/客服双视图、回复建议、资料检索与人工确认操作。
 - [OpenAI 航空客服 Demo 中文版](./openai-airline-agents-demo-cn/README.zh-CN.md)：直接对话、业务分流、工具调用、行程上下文与运行观测。
